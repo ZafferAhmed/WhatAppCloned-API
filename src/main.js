@@ -30,7 +30,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["../src/Routes/api.js"],
+  apis: ["./src/routes/api.js"],
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
