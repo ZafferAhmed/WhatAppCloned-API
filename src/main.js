@@ -20,11 +20,19 @@ const swaggerOptions = {
       description: "API documentation for WhatsApp Clone backend",
     },
     servers: [
-      { url: "http://localhost:10000" },
+      {
+        url: "http://localhost:10000",
+        description: "Local server",
+      },
+      {
+        url: "https://whatappcloned-api.onrender.com",
+        description: "Deployed server",
+      },
     ],
   },
   apis: ["./src/routes/api.js"],
 };
+
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
