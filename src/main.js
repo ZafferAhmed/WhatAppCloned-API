@@ -21,12 +21,12 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "http://18.144.169.213:3000",
         description: "Local server",
       },
     ],
   },
-  apis: ["./src/routes/api.js"],
+  apis: ["./src/Routes/api.js"],
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
