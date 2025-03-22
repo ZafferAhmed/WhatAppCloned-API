@@ -21,12 +21,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:10000",
+        url: "http://localhost:3000",
         description: "Local server",
-      },
-      {
-        url: "https://whatappcloned-api.onrender.com",
-        description: "Deployed server",
       },
     ],
   },
@@ -38,5 +34,5 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use("/api", apiRoutes);
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
