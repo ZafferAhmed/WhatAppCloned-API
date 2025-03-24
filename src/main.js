@@ -8,11 +8,17 @@ const apiRoutes = require("./Routes/api");
 dotenv.config({ path: "./.env" });
 
 const app = express();
-app.use(cors({
-  origin: ["https://whats-app-clone-ui.vercel.app/"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));app.use(express.json());
+app.use(
+  cors({
+    origin: ["https://whats-app-clone-ui.vercel.app"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+app.use(express.json());
+
+app.options("*", cors());
 
 const swaggerOptions = {
   definition: {
