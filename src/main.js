@@ -8,8 +8,11 @@ const apiRoutes = require("./Routes/api");
 dotenv.config({ path: "./.env" });
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: ["https://whats-app-clone-ui.vercel.app/"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));app.use(express.json());
 
 const swaggerOptions = {
   definition: {
@@ -22,7 +25,7 @@ const swaggerOptions = {
     servers: [
       {
         url: "http://18.144.169.213:3000",
-        description: "Local server",
+        description: "Development server",
       },
     ],
   },
@@ -34,5 +37,5 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use("/api", apiRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
