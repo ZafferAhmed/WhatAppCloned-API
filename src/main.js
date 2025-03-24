@@ -30,7 +30,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://18.144.169.213:3000",
+        url: "http://18.144.169.213:4000",
         description: "Development server",
       },
     ],
