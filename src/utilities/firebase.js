@@ -1,16 +1,14 @@
 const admin = require("firebase-admin");
 require("dotenv").config();
 
-const serviceAccount = JSON.parse(
-  Buffer.from(process.env.FIREBASE_CREDENTIALS, "base64").toString("utf8")
-);
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
-admin.apps.length
-  ? admin.app()
-  : admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    });
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET, 
+  });
+}
 
 const db = admin.firestore();
 const bucket = admin.storage().bucket();
