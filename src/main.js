@@ -6,10 +6,10 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const apiRoutes = require("./Routes/api");
 const path = require("path");
 
-
 dotenv.config({ path: "./.env" });
 
 const app = express();
+
 app.use(
   cors({
     origin: ["https://whats-app-clone-ui.vercel.app"],
@@ -19,7 +19,6 @@ app.use(
   })
 );
 app.use(express.json());
-
 app.options("*", cors());
 
 const swaggerOptions = {
@@ -39,16 +38,21 @@ const swaggerOptions = {
   },
   apis: ["./src/Routes/api.js"],
 };
-
-app.use(express.static(path.join(__dirname, "../dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../dist", "index.html"));
-});
-
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.use(express.static(path.join(__dirname, "../dist")));
+
+app.use("/api", (req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 app.use("/api", apiRoutes);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dist", "index.html"));
+});
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
