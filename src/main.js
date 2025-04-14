@@ -5,10 +5,21 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const apiRoutes = require("./Routes/api");
 const path = require("path");
+const http = require("http");
+const socketIO = require("socket.io");
 
 dotenv.config({ path: "./.env" });
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+require("./Socket")(io);
 
 app.use(
   cors({
@@ -38,6 +49,7 @@ const swaggerOptions = {
   },
   apis: ["./src/Routes/api.js"],
 };
+
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
@@ -55,4 +67,4 @@ app.get("*", (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
