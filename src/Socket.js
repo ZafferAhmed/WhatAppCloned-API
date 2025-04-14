@@ -1,5 +1,6 @@
 module.exports = (io) => {
-  io.on("connection", (socket) => {
+  return io.on("connection", (socket) => {
+    
     console.log("🟢 New client connected: ", socket.id);
 
     socket.on("sendMessage", (msg) => {
