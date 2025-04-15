@@ -42,10 +42,18 @@ exports.registerOrLogin = async (req, res) => {
 exports.getUsers = async (req, res) => {
   try {
     const usersSnapshot = await db.collection("users").get();
+    const authUsers = await admin.auth().listUsers();
+
+    const validUIDs = new Set(authUsers.users.map((u) => u.uid));
+
     const users = [];
     usersSnapshot.forEach((doc) => {
-      users.push(doc.data());
+      const data = doc.data();
+      if (validUIDs.has(data.uid)) {
+        users.push(data);
+      }
     });
+
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
