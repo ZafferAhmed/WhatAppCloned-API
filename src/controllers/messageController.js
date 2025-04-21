@@ -1,16 +1,35 @@
-const { admin,db } = require("../utilities/firebase");
+const { admin, db } = require("../utilities/firebase");
 
 exports.sendMessage = async (req, res) => {
   try {
     const { senderId, receiverId, message } = req.body;
+
+    const throttleDocRef = db.collection("throttle").doc(senderId);
+    const throttleDoc = await throttleDocRef.get();
+
+    const now = Date.now();
+
+    if (throttleDoc.exists) {
+      const lastSent = throttleDoc.data().lastSent;
+      if (lastSent && now - lastSent < 1000) {
+        return res
+          .status(429)
+          .json({ error: "Too many messages. Please wait." });
+      }
+    }
+
     const msg = {
       senderId,
       receiverId,
       message,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
     };
+
     await db.collection("messages").add(msg);
-    res.json({ success: true, msg });
+
+    await throttleDocRef.set({ lastSent: now });
+
+    res.json({ success: true, ...msg });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
