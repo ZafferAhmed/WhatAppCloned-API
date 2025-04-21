@@ -17,12 +17,13 @@ exports.sendMessage = async (req, res) => {
           .json({ error: "Too many messages. Please wait." });
       }
     }
+    const timestamp = Date.now();
 
     const msg = {
       senderId,
       receiverId,
       message,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      timestamp,
     };
 
     await db.collection("messages").add(msg);
